@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no">
+  <title>Howler.js Audio Player</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+  <div id="metadata">
+    <div
+      style="position: relative; padding: 0px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <img
+        src="https://audiobooks.dev/audiobookshelf/api/items/2598d7de-116e-4ec6-8ef9-7b90cacb36d7/cover?ts=1732632313745"
+        width="208" height="208" />
+      <div id="waveform"></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 5px; color: white;">
+      <div style="font-size: 24px;">Moral Letters, Vol. 1</div>
+      <div style="font-size: 18px;">Moral Letters #1</div>
+      <div style="font-size: 18px;">by Lucius Annaeus Seneca</div>
+      <div style="font-size: 15px; display: grid; grid-template-columns: 100px auto;"><span
+          style="color: #ffffff40;">GENRES</span><span>Philosophy, Stoicism</span></div>
+      <div style="font-size: 15px; display: grid; grid-template-columns: 100px auto;"><span
+          style="color: #ffffff40;">GENRES</span><span>Philosophy, Stoicism</span></div>
+      <div style="font-size: 15px; display: grid; grid-template-columns: 100px auto;"><span
+          style="color: #ffffff40;">GENRES</span><span>Philosophy, Stoicism</span></div>
+      <div style="font-size: 15px;">This is the second volume of the Letters, Epistles LXVI-XCII. Among the
+        personalities of the early Roman Empire
+        there are few who offer to the readers of to-day such dramatic interest as does Lucius Annaeus Seneca, the
+        author
+        of the Epistles. These letters, written by Seneca towards the end of his life, are all addressed to his friend
+        Lucilius, who, at the time when these letters were written, was a procurator in Sicily. The form of this work,
+        as
+        Bacon says, is a collection of essays rather than of letters. Summary paraphrased from the Introduction in
+        Volume
+        1 by Suprad.</div>
+      <div id="chapter-lists">
+
+      </div>
+    </div>
+  </div>
+  <!-- Top Info -->
+
+  <div class="howler-player">
+    <!-- Controls -->
+    <div class="controlsOuter">
+      <div class="controlsInner" id="control1">
+        <div class="btn btn-sm" id="playbackRateBtn"><i class="fas fa-tachometer-alt"></i></div>
+        <div class="btn btn-sm" id="sleepTimeBtn"><i class="fas fa-clock"></i></div>
+        <div class="btn btn-sm" id="settingsBtn"><i class="fas fa-cog"></i></div>
+      </div>
+      <div class="controlsInner" id="control2">
+        <div class="btn btn-sm" id="prevBtn"><i class="fas fa-step-backward"></i></div>
+        <div class="btn btn-sm" id="backwardBtn"><i class="fas fa-undo-alt"></i></div>
+        <div style="position: relative;">
+          <div class="btn btn-md" style="display: none;">
+            <div id="loading"></div>
+          </div>
+          <div class="btn btn-md" id="playBtn"><i class="fas fa-play"></i></div>
+          <div class="btn btn-md" id="pauseBtn"><i class="fas fa-pause"></i></div>
+        </div>
+        <div class="btn btn-sm" id="forwardBtn"><i class="fas fa-redo-alt"></i></div>
+        <div class="btn btn-sm" id="nextBtn"><i class="fas fa-step-forward"></i></div>
+      </div>
+      <div class="controlsInner" id="control3">
+        <div class="btn btn-sm" id="playlistBtn"><i class="fas fa-list"></i></div>
+        <div class="btn btn-sm" id="bookmarkBtn"><i class="fas fa-bookmark"></i></div>
+        <div class="btn btn-sm" id="volumeBtn"><i class="fas fa-volume-up"></i></div>
+      </div>
+    </div>
+    <!-- Progress -->
+    <div style="display: flex; flex-direction: column; gap: 1vh;">
+      <div style="display: flex; flex-direction: column; position: relative;">
+        <div id="bar"></div>
+        <div id="progress"></div>
+        <div id="totalProgress"></div>
+      </div>
+
+      <div id="title">
+        <div id="timer">0:00</div>
+        <span id="track"></span>
+        <div id="duration">0:00</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Playlist -->
+  <div id="playlist">
+    <div id="list"></div>
+  </div>
+
+  <!-- Volume -->
+  <div id="volume" class="fadeout">
+    <div id="barFull" class="bar"></div>
+    <div id="barEmpty" class="bar"></div>
+    <div id="sliderBtn"></div>
+  </div>
+
+  <div id="playbackRate" class="fadeout">
+    <div class="playbackrate-box">
+      <div class="grid-5-cols">
+        <a class="btn-round" onclick="playrate(0.5)">0.5x</a>
+        <a class="btn-round" onclick="playrate(1)">1x</a>
+        <a class="btn-round" onclick="playrate(1.2)">1.2x</a>
+        <a class="btn-round" onclick="playrate(1.5)">1.5x</a>
+        <a class="btn-round" onclick="playrate(2)">2x</a>
+      </div>
+      <div class="grid-1-3-1-cols">
+        <a class="btn-round-black" onclick="decreasePlayrate()"><i class="fas fa-minus"></i></a>
+        <div class="rate-text" id="currentRate"><span>1.0x</span></div>
+        <a class="btn-round-black" onclick="increasePlayrate()"><i class="fas fa-plus"></i></a>
+      </div>
+    </div>
+  </div>
+  <div id="sleepTime" class="fadeout">
+    <div class="time-box">
+      <div class="time-line">5 minutes</div>
+      <div class="time-line">15 minutes</div>
+      <div class="time-line">20 minutes</div>
+      <div class="time-line">30 minutes</div>
+      <div class="time-line">45 minutes</div>
+      <div class="time-line">1 hours</div>
+      <div class="time-line">90 minutes</div>
+      <div class="time-line">2 hours</div>
+      <div class="time-line">End of Chapter</div>
+      <div class="f-row">
+        <input class="input-black" type="number" placeholder="Time in minutes" min="0.1" />
+        <div class="btn-round-green">Submit</div>
+      </div>
+      <div class="line"></div>
+      <div class="control-grid">
+        <div class="btn-round-black"><i class="fas fa-minus"></i> 30m</div>
+        <div class="btn-round-black"><i class="fas fa-minus"></i></div>
+        <div class="rate-text"><span>1.0x</span></div>
+        <div class="btn-round-black"><i class="fas fa-plus"></i></div>
+        <div class="btn-round-black"><i class="fas fa-plus"></i> 30m</div>
+      </div>
+      <div class="btn-round-black">Cancel</div>
+    </div>
+  </div>
+  <div id="settings" class="fadeout">
+    <div class="setting-box">
+      <div class="t-xs t-white">Player Settings</div>
+      <div class="t-md t-white"><input type="checkbox" />Use chapter track</div>
+      <div class="t-sm t-white">Jump forward amount</div>
+      <select onchange="setForwardJump(this.value)">
+        <option value="10">10 seconds</option>
+        <option value="15">15 seconds</option>
+        <option value="30">30 seconds</option>
+        <option value="60">60 seconds</option>
+        <option value="120">2 minutes</option>
+        <option value="300">5 minutes</option>
+      </select>
+      <div class="t-sm t-white">Jump backward amount</div>
+      <select onchange="setBackwardJump(this.value)">
+        <option value="10">10 seconds</option>
+        <option value="15">15 seconds</option>
+        <option value="30">30 seconds</option>
+        <option value="60">60 seconds</option>
+        <option value="120">2 minutes</option>
+        <option value="300">5 minutes</option>
+      </select>
+      <div class="t-sm t-white">Playback Rate Increment/Decrement Amount</div>
+      <select onchange="setRateInterval(this.value)">
+        <option value="0.1">0.1</option>
+        <option value="0.05">0.05</option>
+      </select>
+    </div>
+  </div>
+  <div id="bookmark" class="fadeout">
+    <div class="bookmark-box">
+      <div class="bookmark-line"><span>1:38:31</span><span>02/07/2025 01:21</span></div>
+      <div class="bookmark-line"><span>1:38:31</span><span>02/07/2025 01:21</span></div>
+      <div class="bookmark-line"><span>1:38:31</span><span>02/07/2025 01:21</span></div>
+      <div class="bookmark-line"><span>1:38:31</span><span>02/07/2025 01:21</span></div>
+      <div class="bookmark-line" style="border-top: 1px solid #ffffff10;">
+        <span id="current-seek">3:40:33</span>
+        <div class="f-row">
+          <input type="text" class="input-black" />
+          <a class="btn-round-green"><i class="fas fa-plus"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Scripts -->
+  <script src="./howler.core.js"></script>
+  <script src="./siriwave.js"></script>
+  <script src="./player.js"></script>
+</body>
+
+</html>
