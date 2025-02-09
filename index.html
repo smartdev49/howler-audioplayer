@@ -57,9 +57,7 @@
         <div class="btn btn-sm" id="prevBtn"><i class="fas fa-step-backward"></i></div>
         <div class="btn btn-sm" id="backwardBtn"><i class="fas fa-undo-alt"></i></div>
         <div style="position: relative;">
-          <div class="btn btn-md" style="display: none;">
-            <div id="loading"></div>
-          </div>
+          <div id="loading"></div>
           <div class="btn btn-md" id="playBtn"><i class="fas fa-play"></i></div>
           <div class="btn btn-md" id="pauseBtn"><i class="fas fa-pause"></i></div>
         </div>
@@ -119,26 +117,26 @@
   </div>
   <div id="sleepTime" class="fadeout">
     <div class="time-box">
-      <div class="time-line">5 minutes</div>
-      <div class="time-line">15 minutes</div>
-      <div class="time-line">20 minutes</div>
-      <div class="time-line">30 minutes</div>
-      <div class="time-line">45 minutes</div>
-      <div class="time-line">1 hours</div>
-      <div class="time-line">90 minutes</div>
-      <div class="time-line">2 hours</div>
-      <div class="time-line">End of Chapter</div>
+      <a class="time-line">5 minutes</a>
+      <a class="time-line">15 minutes</a>
+      <a class="time-line">20 minutes</a>
+      <a class="time-line">30 minutes</a>
+      <a class="time-line">45 minutes</a>
+      <a class="time-line">1 hours</a>
+      <a class="time-line">90 minutes</a>
+      <a class="time-line">2 hours</a>
+      <a class="time-line">End of Chapter</a>
       <div class="f-row">
         <input class="input-black" type="number" placeholder="Time in minutes" min="0.1" />
-        <div class="btn-round-green">Submit</div>
+        <a class="btn-round-green">Submit</a>
       </div>
       <div class="line"></div>
       <div class="control-grid">
-        <div class="btn-round-black"><i class="fas fa-minus"></i> 30m</div>
-        <div class="btn-round-black"><i class="fas fa-minus"></i></div>
-        <div class="rate-text"><span>1.0x</span></div>
-        <div class="btn-round-black"><i class="fas fa-plus"></i></div>
-        <div class="btn-round-black"><i class="fas fa-plus"></i> 30m</div>
+        <a class="btn-round-black"><i class="fas fa-minus"></i> 30m</a>
+        <a class="btn-round-black"><i class="fas fa-minus"></i></a>
+        <div class="rate-text"><span cla="sleepTime">1.0x</span></div>
+        <a class="btn-round-black"><i class="fas fa-plus"></i></a>
+        <a class="btn-round-black"><i class="fas fa-plus"></i> 30m</a>
       </div>
       <div class="btn-round-black">Cancel</div>
     </div>
